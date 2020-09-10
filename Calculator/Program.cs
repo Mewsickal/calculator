@@ -33,7 +33,7 @@ namespace CalculatorApp
             switch (command.Operation)
             {
                 case Operation.Unknown:
-                    return "Invalid input.";
+                    return "Invalid input!";
                 case Operation.Push:
                     if (!calculator.TryPush(command.Argument))
                     {
@@ -51,7 +51,7 @@ namespace CalculatorApp
                     }
                     else
                     {
-                        return "Not enough numbers on the stack.";
+                        return "Not enough numbers on the stack!";
                     }
                 case Operation.Sub:
                     if (calculator.TrySub())
@@ -60,7 +60,7 @@ namespace CalculatorApp
                     }
                     else
                     {
-                        return "Not enough numbers on the stack.";
+                        return "Not enough numbers on the stack!";
                     }
                 default:
                     return string.Empty;
