@@ -1,12 +1,14 @@
 using CalculatorApp;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace CalculatorTests
+namespace CalculatorAppTests
 {
     [TestClass]
-    public class PushTests
+    public class CalculatorTests
     {
         [TestMethod]
         public void WhenNumberIsPushed_NumberShouldAppearOnStack()
@@ -47,6 +49,25 @@ namespace CalculatorTests
         {
             Calculator calc = new Calculator();
             calc.TryPush(number).Should().Be(result);
+        }
+
+        [DataTestMethod]
+        [DataRow(new int[] { }, new int[] { }, 1)]
+        [DataRow(new int[] { 5 }, new int[] { }, 1)]
+        [DataRow(new int[] { 5, 7 }, new int[] { 5 }, 1)]
+        [DataRow(new int[] { 5, 7 }, new int[] { }, 2)]
+        public void WhenNumberIsPoped_ShouldRemoveItFromStack(int[] initialStack, int[] resultStack, int timesToPop)
+        {
+            Calculator calc = new Calculator();
+            foreach (var val in initialStack)
+            {
+                calc.TryPush(val);
+            }
+            for (int i = 0; i < timesToPop; i++)
+            {
+                calc.Pop();
+            }                      
+            calc.Stack.Should().BeEquivalentTo(resultStack);
         }
     }
 }

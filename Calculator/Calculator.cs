@@ -30,5 +30,13 @@ namespace CalculatorApp
             stack.Push(value);
             return true;
         }
+
+        public void Pop()
+        {
+            if (stack.Count > 0)
+            {
+                stack.Pop();
+            }
+        }
     }
 }
