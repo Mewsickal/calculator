@@ -69,5 +69,40 @@ namespace CalculatorAppTests
             }                      
             calc.Stack.Should().BeEquivalentTo(resultStack);
         }
+
+        [TestMethod]
+        public void WhenAddIsUsedOnEmptyStack_ShouldReject()
+        {
+            Calculator calc = new Calculator();
+            calc.TryAdd().Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void WhenAddIsUsedOnStackWith1Element_ShouldReject()
+        {
+            Calculator calc = new Calculator();
+            calc.TryPush(1);
+            calc.TryAdd().Should().BeFalse();
+        }
+
+        [DataTestMethod]
+        [DataRow(new int[] { 1, 1 }, new int[] { 2 }, 1)]
+        [DataRow(new int[] { 1, 1, 5 }, new int[] { 1, 6 }, 1)]
+        [DataRow(new int[] { 1, 1, 5 }, new int[] { 7 }, 2)]
+        [DataRow(new int[] { 1023, 1 }, new int[] { 0 }, 1)]
+        [DataRow(new int[] { 1023, 1023 }, new int[] { 1022 }, 1)]
+        public void WhenNumbersAreAdded_ShouldShowResultOnStack(int[] initialStack, int[] resultStack, int timesToAdd)
+        {
+            Calculator calc = new Calculator();
+            foreach (var val in initialStack)
+            {
+                calc.TryPush(val);
+            }
+            for (int i = 0; i < timesToAdd; i++)
+            {
+                calc.TryAdd();
+            }
+            calc.Stack.Should().BeEquivalentTo(resultStack);
+        }
     }
 }
