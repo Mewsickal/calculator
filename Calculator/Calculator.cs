@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading;
 
 namespace CalculatorApp
 {
@@ -43,11 +41,21 @@ namespace CalculatorApp
 
         public bool TryAdd()
         {
+            return TryDoOperation((x, y) => x + y);
+        }
+
+        public bool TrySub()
+        {
+            return TryDoOperation((x, y) => x - y);
+        }
+
+        private bool TryDoOperation(Func<int, int, int> func)
+        {
             if (stack.Count < 2)
             {
                 return false;
             }
-            int result = stack.Pop() + stack.Pop();
+            int result = func(stack.Pop(),stack.Pop());
             stack.Push(ReduceResult(result));
             return true;
         }
@@ -58,10 +66,14 @@ namespace CalculatorApp
         }
 
         private int ReduceResult(int result)
-        {
+        {            
             if (!InValidRange(result))
             {
                 result = result % (maxVal + 1);
+                if (result < 0)
+                {
+                    result += maxVal + 1;
+                }
             }
             return result;
         }

@@ -1,9 +1,7 @@
 using CalculatorApp;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace CalculatorAppTests
 {
@@ -101,6 +99,41 @@ namespace CalculatorAppTests
             for (int i = 0; i < timesToAdd; i++)
             {
                 calc.TryAdd();
+            }
+            calc.Stack.Should().BeEquivalentTo(resultStack);
+        }
+
+        [TestMethod]
+        public void WhenSubIsUsedOnEmptyStack_ShouldReject()
+        {
+            Calculator calc = new Calculator();
+            calc.TrySub().Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void WhenSubIsUsedOnStackWith1Element_ShouldReject()
+        {
+            Calculator calc = new Calculator();
+            calc.TryPush(1);
+            calc.TrySub().Should().BeFalse();
+        }
+
+        [DataTestMethod]
+        [DataRow(new int[] { 1, 1 }, new int[] { 0 }, 1)]
+        [DataRow(new int[] { 1, 1, 5 }, new int[] { 1, 4 }, 1)]
+        [DataRow(new int[] { 1, 1, 5 }, new int[] { 3 }, 2)]
+        [DataRow(new int[] { 1023, 1 }, new int[] { 2 }, 1)]
+        [DataRow(new int[] { 7, 5 }, new int[] { 1022 }, 1)]
+        public void WhenNumbersAreSubtracted_ShouldShowResultOnStack(int[] initialStack, int[] resultStack, int timesToAdd)
+        {
+            Calculator calc = new Calculator();
+            foreach (var val in initialStack)
+            {
+                calc.TryPush(val);
+            }
+            for (int i = 0; i < timesToAdd; i++)
+            {
+                calc.TrySub();
             }
             calc.Stack.Should().BeEquivalentTo(resultStack);
         }
